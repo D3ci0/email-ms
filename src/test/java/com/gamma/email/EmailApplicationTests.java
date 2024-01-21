@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class EmailApplicationTests {
 	private static final String REST_SERVICE_PORT_PATTERN = "########";
-	private static final String REST_SERVICE_URI = "http://localhost:" + REST_SERVICE_PORT_PATTERN + "/v1/emails/";
+	private static final String REST_SERVICE_URI = "http://localhost:" + REST_SERVICE_PORT_PATTERN;
 	private static final Logger logger = LoggerFactory.getLogger(EmailApplicationTests.class);
 	@LocalServerPort
 	private int port;
@@ -35,7 +35,8 @@ class EmailApplicationTests {
 	void getEmailsWithAttachmentsByFilterTest(String tenantId, String userId, LocalDateTime from, LocalDateTime to,
 											  String expectedResultCode, int expectedEmailSize) {
 
-		StringBuilder url = new StringBuilder(REST_SERVICE_URI.replaceAll(REST_SERVICE_PORT_PATTERN, Integer.toString(port)));
+		StringBuilder url = new StringBuilder(REST_SERVICE_URI.replaceAll(REST_SERVICE_PORT_PATTERN, Integer.toString(port)))
+				.append("/v1/emails/");
 		logger.info("BASE URL: {}", url);
 
 		String urlTemplate = UriComponentsBuilder.fromHttpUrl(url.toString())
@@ -62,7 +63,8 @@ class EmailApplicationTests {
 	@CsvSource({"1,1,1,prova.pdf",
 			"1,1,2,prova.txt"})
 	void getEmailAttachmentTest(String tenantId, String userId, String emailId, String fileName){
-		StringBuilder url = new StringBuilder(REST_SERVICE_URI.replaceAll(REST_SERVICE_PORT_PATTERN, Integer.toString(port)));
+		StringBuilder url = new StringBuilder(REST_SERVICE_URI.replaceAll(REST_SERVICE_PORT_PATTERN, Integer.toString(port)))
+				.append("/v1/attachment/");;
 		logger.info("BASE URL: {}", url);
 
 		String urlTemplate = UriComponentsBuilder.fromHttpUrl(url.toString())
@@ -73,9 +75,7 @@ class EmailApplicationTests {
 
 		logger.info("ENRICHED URL: {}", urlTemplate);
 
-
-
-		ResponseEntity<Resource> response = restTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity(new HttpHeaders()), Resource.class);
+		ResponseEntity<Resource> response = restTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), Resource.class);
 
 		Assert.isTrue(response.getBody() != null, "Response body is null");
 		Assert.isTrue(response.getBody().getFilename() != null, "File name is null");

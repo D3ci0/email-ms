@@ -31,7 +31,7 @@ public class EmailController {
 
     }
 
-    @GetMapping("/emails/{tenantId}/{userId}/{attachmentId}")
+    @GetMapping("/attachment/{tenantId}/{userId}/{attachmentId}")
     public StreamingResponseBody getEmailAttachment(HttpServletResponse response,
                                                     @PathVariable Long tenantId, @PathVariable Long userId,
                                                     @PathVariable Long attachmentId){
