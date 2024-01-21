@@ -62,7 +62,7 @@ class EmailApplicationTests {
 	@ParameterizedTest
 	@CsvSource({"1,1,1,prova.pdf",
 			"1,1,2,prova.txt"})
-	void getEmailAttachmentTest(String tenantId, String userId, String emailId, String fileName){
+	void getEmailAttachmentTest(String tenantId, String userId, String attachmentId, String fileName){
 		StringBuilder url = new StringBuilder(REST_SERVICE_URI.replaceAll(REST_SERVICE_PORT_PATTERN, Integer.toString(port)))
 				.append("/v1/attachment/");;
 		logger.info("BASE URL: {}", url);
@@ -70,7 +70,7 @@ class EmailApplicationTests {
 		String urlTemplate = UriComponentsBuilder.fromHttpUrl(url.toString())
 				.path("/{tenantId}/{userId}/{attachmentId}")
 				.encode()
-				.build(tenantId, userId, emailId)
+				.build(tenantId, userId, attachmentId)
 				.toString();
 
 		logger.info("ENRICHED URL: {}", urlTemplate);
