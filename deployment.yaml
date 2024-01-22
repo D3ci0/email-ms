@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: email-ms
+  name: email-ms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: email-ms
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: email-ms
+    spec:
+      containers:
+      - image: decioc/email-ms
+        name: email-ms
+        resources:
+          requests:
+            cpu: 200m
+            memory: 600Mi
+          limits:
+            cpu: 200m
+            memory: 800Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: email-ms
+  labels:
+    app: email-ms
+spec:
+  type: ClusterIP
+  ports:
+    - name: email-ms
+      port: 8080
+      protocol: TCP
+  selector:
+    app: email-ms
+status: {}
